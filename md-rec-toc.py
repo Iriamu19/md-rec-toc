@@ -5,13 +5,16 @@ input_dir = pathlib.Path('test')
 #les_md = test.rglob("*.md")
 #print(list(les_md))
 
-dossier =  input_dir
+
 def listing(dossier):
-    for item in dosser.iterdir()
+    for item in dossier.iterdir():
+
+        indent = len(item.parts) - 2
+
         if item.is_dir():
+            print(indent * "    " + "- " + item.stem)
             listing(item)
         else:
-            full_path = item.relative_to('input_dir')
-            indent = len(full_path.parts) - 1
-            print(indent * "    " + "- [" + item.stem + "](" + full_path + ")" )
+            print(indent * "    " + "- [" + item.stem + "](" + str(item) + ")" )
 
+listing(input_dir)

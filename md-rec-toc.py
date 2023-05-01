@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import sys
 import pathlib
 import re
 import argparse
@@ -12,10 +11,11 @@ def toc(folder):
     sorted_list = sorted(list) # sort by alphabetic order
 
     for item in sorted_list:
-        indent_nb = len(item.parts) - 1
+        indent_nb = len(item.parts) - 1 # size of indention = tree depth
+        indent_space = indent_nb * "    "
 
         if item.is_dir():
-            print(indent_nb * "    " + "- " + item.stem)
+            print(indent_space + "- " + item.stem)
             toc(item)
         else:
             if no_space:
@@ -26,7 +26,7 @@ def toc(folder):
             if no_file_ext:
                 path = re.sub('\.[a-z]{2,3}$', '', path) 
             
-            print(indent_nb * "    " + "- [" + item.stem + "](" + path + ")" )
+            print(indent_space + "- [" + item.stem + "](" + path + ")" )
 
 ######## manage command line argument ########
 
@@ -41,6 +41,10 @@ args = vars(parser.parse_args())
 no_space = args["no_space"]
 no_file_ext = args["no_file_ext"]
 input_dir = pathlib.Path(args["dir"])
+
+if not input_dir.exists():
+    print("No such directory")
+    quit()
 
 ######## main part ########
 # print the root folder if it is not the current directory

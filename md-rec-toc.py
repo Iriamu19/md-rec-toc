@@ -3,10 +3,9 @@
 import sys
 import pathlib
 import re
+import argparse
 
-mode = 'obsidian'
-
-# main recursive function
+######## main recursive function #######
 def toc(folder):
     
     list = folder.iterdir()
@@ -19,32 +18,33 @@ def toc(folder):
             print(indent_nb * "    " + "- " + item.stem)
             toc(item)
         else:
-            if mode == 'obsidian':
-                print(indent_nb * "    " + "- [" + item.stem + "](" + str(item).replace(' ', '%20') + ")" )
-            elif mode == 'wiki_gitlab':
-                path_with_no_ext = re.sub('\.[a-z]{2,3}$', '', str(item)) 
-                print(indent_nb * "    " + "- [" + item.stem + "](" + path_with_no_ext + ")" )
+            if no_space:
+                path = str(item).replace(' ', '%20')
             else:
-                print(indent_nb * "    " + "- [" + item.stem + "](" + str(item) + ")" )
+                path = str(item)
+            
+            if no_file_ext:
+                path = re.sub('\.[a-z]{2,3}$', '', path) 
+            
+            print(indent_nb * "    " + "- [" + item.stem + "](" + path + ")" )
 
-# manage command line argument
+######## manage command line argument ########
 
-if len(sys.argv) == 0:
-    print("directory missing")
-    quit()
+parser = argparse.ArgumentParser(description="Recursively generate a table of content of a folder containing markdown files",
+                                 formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+parser.add_argument("-s", "--no-space", action="store_true", help="print %%20 instead of spaces in filepath")
+parser.add_argument("-e", "--no-file-ext", action="store_true", help="remove file extension in path")
+parser.add_argument("dir", help="directory from wich generating the toc")
 
-if len(sys.argv) > 2:
-    print("accept only one directory ")
-    quit()
+args = vars(parser.parse_args())
 
-input_dir = pathlib.Path(sys.argv[1])
+no_space = args["no_space"]
+no_file_ext = args["no_file_ext"]
+input_dir = pathlib.Path(args["dir"])
 
-if not input_dir.exists():
-    print("this directory doesn't exist")
-    quit()
-
+######## main part ########
 # print the root folder if it is not the current directory
-if input_dir != pathlib.PurePath("."):
+if input_dir != pathlib.Path("."):
     print(" - " + input_dir.stem)
 
 # execute the main function                         

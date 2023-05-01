@@ -5,7 +5,11 @@ import pathlib
 
 # main recursive function
 def toc(folder):
-    for item in folder.iterdir():
+    
+    list = folder.iterdir()
+    sorted_list = sorted(list) # sort by alphabetic order
+
+    for item in sorted_list:
         indent_nb = len(item.parts) - 1
 
         if item.is_dir():

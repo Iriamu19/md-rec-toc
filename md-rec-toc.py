@@ -2,6 +2,9 @@
 
 import sys
 import pathlib
+import re
+
+mode = 'obsidian'
 
 # main recursive function
 def toc(folder):
@@ -16,7 +19,13 @@ def toc(folder):
             print(indent_nb * "    " + "- " + item.stem)
             toc(item)
         else:
-            print(indent_nb * "    " + "- [" + item.stem + "](" + str(item) + ")" )
+            if mode == 'obsidian':
+                print(indent_nb * "    " + "- [" + item.stem + "](" + str(item).replace(' ', '%20') + ")" )
+            elif mode == 'wiki_gitlab':
+                path_with_no_ext = re.sub('\.[a-z]{2,3}$', '', str(item)) 
+                print(indent_nb * "    " + "- [" + item.stem + "](" + path_with_no_ext + ")" )
+            else:
+                print(indent_nb * "    " + "- [" + item.stem + "](" + str(item) + ")" )
 
 # manage command line argument
 

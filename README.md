@@ -1,10 +1,10 @@
 # md-rec-toc
 
-Make a markdown table of content of a folder recusersively.
+Recusersively make a markdown table of content of a folder.
 
 ## Example :
 
-From this :
+From this folder :
 
 ```
 .
@@ -29,6 +29,12 @@ We get this :
 - [coucou](test/coucou.md)
 ```
 
-## To-do
+## Modes
 
-- List in alphabetic order
+In the example you can see the normal mode.
+
+There are two other modes :
+- one without file extension (nice for gitlab wiki)
+- one with "%20" instead of spaces in file path (nice for Obsidian)
+
+Both modes can be combined.
